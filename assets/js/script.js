@@ -365,13 +365,56 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 
 // Form submission logic
+// const signupForm = document.getElementById('signupForm');
+// signupForm.addEventListener('submit', function (event) {
+//   // event.preventDefault();
+//   // Handle form submission, e.g., send data to server
+//   // You can add your own logic here
+//   alert('Sign up successful!');
+// });
+
+
 const signupForm = document.getElementById('signupForm');
+
 signupForm.addEventListener('submit', function (event) {
-  // event.preventDefault();
-  // Handle form submission, e.g., send data to server
-  // You can add your own logic here
-  alert('Sign up successful!');
+  event.preventDefault();
+  const submitter = document.querySelectorAll("button[value=save]");
+  // Get form data
+  // var formData = new FormData(this);
+  let userName = document.querySelector("#name");
+  let userEmail = document.querySelector("#email");
+  console.log(userName.value);
+  console.log(userEmail.value);
+
+  let formData = {userName:userName.value, userEmail:userEmail.value};
+  console.log(formData);
+  
+  // Send data to server
+  fetch('/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.text();
+  })
+  .then((data) => {
+      console.log(data); // Log server response
+      data = JSON.parse(data);
+      let {name,status} = data;
+      console.log(name, status);
+      window.alert(name+ " " + status);
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
 });
+
 // script.js
 
 
