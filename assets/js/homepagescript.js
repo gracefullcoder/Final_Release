@@ -107,7 +107,7 @@ const heroSliderPrevBtn = document.querySelector("[data-prev-btn]");
 const heroSliderNextBtn = document.querySelector("[data-next-btn]");
 
 let currentSlidePos = 0;
-let lastActiveSliderItem = heroSliderItems[0];
+let lastActiveSliderItem = heroSliderItems[heroSliderItems.length - 1];
 
 const updateSliderPos = function () {
   lastActiveSliderItem.classList.remove("active");
@@ -247,7 +247,8 @@ const testiSliderPrevBtn = document.querySelector("[testi-data-prev-btn]");
 const testiSliderNextBtn = document.querySelector("[testi-data-next-btn]");
 
 let currentTestiSlidePos = 0;
-let lastActiveTestiSliderItem = heroSliderItems[0];
+let lastActiveTestiSliderItem = testiSliderItems[testiSliderItems.length - 1];
+console.dir(lastActiveTestiSliderItem);
 
 const updateTestiSliderPos = function () {
   lastActiveTestiSliderItem.classList.remove("active");
@@ -279,7 +280,21 @@ const slideTestiPrev = function () {
 
 testiSliderPrevBtn.addEventListener("click", slideTestiPrev);
 
+let autoTestiSlideInterval;
 
+const testiautoSlide = function () {
+  autoTestiSlideInterval = setInterval(function () {
+    slideTestiNext();
+  }, 3000);
+}
+
+addEventOnElements([testiSliderNextBtn, testiSliderPrevBtn], "mouseover", function () {
+  clearInterval(autoTestiSlideInterval);
+});
+
+addEventOnElements([testiSliderNextBtn, testiSliderPrevBtn], "mouseout", autoSlide);
+
+window.addEventListener("load", testiautoSlide);
 
 /**
  * PARALLAX EFFECT
@@ -311,7 +326,9 @@ window.addEventListener("mousemove", function (event) {
  */
 
 // Set the date and time of the coffee workshop
-const workshopDate = new Date('2024-01-31T12:00:00'); // Replace with the actual date and time
+let time = document.querySelector(".gettime").textContent;
+console.log(time);
+const workshopDate = new Date(time); // Replace with the actual date and time
 
 // Function to update the countdown timer
 function updateCountdown() {
@@ -348,13 +365,56 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 
 // Form submission logic
+// const signupForm = document.getElementById('signupForm');
+// signupForm.addEventListener('submit', function (event) {
+//   // event.preventDefault();
+//   // Handle form submission, e.g., send data to server
+//   // You can add your own logic here
+//   alert('Sign up successful!');
+// });
+
+
 const signupForm = document.getElementById('signupForm');
+
 signupForm.addEventListener('submit', function (event) {
-  // event.preventDefault();
-  // Handle form submission, e.g., send data to server
-  // You can add your own logic here
-  alert('Sign up successful!');
+  event.preventDefault();
+  const submitter = document.querySelectorAll("button[value=save]");
+  // Get form data
+  // var formData = new FormData(this);
+  let userName = document.querySelector("#name");
+  let userEmail = document.querySelector("#email");
+  console.log(userName.value);
+  console.log(userEmail.value);
+
+  let formData = {userName:userName.value, userEmail:userEmail.value};
+  console.log(formData);
+  
+  // Send data to server
+  fetch('/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.text();
+  })
+  .then((data) => {
+      console.log(data); // Log server response
+      data = JSON.parse(data);
+      let {name,status} = data;
+      console.log(name, status);
+      window.alert(name+ " " + status);
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
 });
+
 // script.js
 
 
