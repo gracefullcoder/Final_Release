@@ -15,6 +15,7 @@ const connectDB = require('./config/dbconfig.js');
 const homeRouter = require("./routes/homepageroute.js");
 const adminRouter = require("./routes/adminroutes.js");
 const herosectionRouter = require("./routes/herosectionroutes.js");
+const specialitysectionRouter = require("./routes/specialitysectionroutes.js");
 const countdownRouter = require('./routes/countdownroute.js');
 const eventsectionRouter = require("./routes/eventsectionroute.js");
 const testimonialsectionRouter = require('./routes/testtimonialsectionroute.js');
@@ -27,6 +28,8 @@ connectDB;
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
+// app.use(express.static(path.join(__dirname, '/public')));
+
 
 
 app.use(express.static(__dirname));
@@ -36,7 +39,7 @@ app.use(methodOverride("_method"));
 
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}/admin`);
 });
 
 
@@ -44,15 +47,15 @@ app.use("/",homeRouter);
 
 app.use("/admin", adminRouter);
 
-app.use("/admin/herosection", herosectionRouter)
+app.use("/admin/herosection", herosectionRouter);
 
-app.use("/admin/specialitysection", herosectionRouter);
+app.use("/admin/specialitysection", specialitysectionRouter);
 
 app.use("/admin/countdownsection", countdownRouter);
 
 app.use("/admin/eventsection", eventsectionRouter);
 
-app.use("/admin/testimonialsection", testimonialsectionRouter)
+app.use("/admin/testimonialsection", testimonialsectionRouter);
 
 app.use("/admin/bookings", bookingsRouter);
 
