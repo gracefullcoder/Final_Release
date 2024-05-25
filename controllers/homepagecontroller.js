@@ -1,0 +1,162 @@
+const User = require("../models/user.js");
+const Heroslider = require("../models/herosection.js");
+const Workshop = require("../models/workshop.js");
+const Registration = require("../models/registration.js");
+const Specialslider = require('../models/specialsection.js');
+const Booking = require("../models/booking.js");
+const Testimonial = require('../models/testimonials.js');
+const Event = require("../models/events.js");
+const path = require("path");
+const fs = require('fs');
+const { imagekit } = require("../config/imagekitconfig.js");
+const Notification = require("../models/notifications.js");
+
+const loadMainPage = async (req, res) => {
+    let heroSliders = await Heroslider.find();
+    let workshop = await Workshop.find();
+    let currTime = new Date();
+    let isWorkshop = false;
+    if (workshop.length > 0 && workshop[workshop.length - 1].time > currTime) isWorkshop = true;
+    let specialSection = await Specialslider.find();
+    let testimonials = await Testimonial.find().populate("user");
+    // console.log(testimonials);
+    let events = await Event.find();
+    let allSection = { heroSliders, workshop, specialSection, testimonials, events, user: req.user, isWorkshop: isWorkshop };
+    console.log(req.user);
+    res.render("homepage/index.ejs", { allSection });
+}
+
+
+const tabelBooking = async (req, res) => {
+    const { name, phone, person, time, reservationdate, message } = req.body;
+
+    // Combine date and time into ISO 8601 format
+    const combinedTime = new Date(`${reservationdate}T${time}`);
+    let acceptedTime = new Date(Date.now() + 4 * 60 * 60 * 1000);
+    if (combinedTime < acceptedTime) {
+        return res.send(`Booking should be after 4 hours of current Date : 
+        ${(acceptedTime.getDate()).toString().padStart(2,'0')}-${(acceptedTime.getMonth() + 1).toString().padStart(2,'0')}-${(acceptedTime.getFullYear())} and 
+        current Time ${(acceptedTime.getHours() - 4).toString().padStart(2,'0')}:${(acceptedTime.getMinutes()).toString().padStart(2,'0')}.\n\n
+        Next Booking accepted After : ${acceptedTime.getHours().toString().padStart(2,'0')}:${acceptedTime.getMinutes().toString().padStart(2,'0')}
+        For any Issue You can contact on +91 96246 96846`);
+    } else {
+        const newbooking = new Booking({ name, phone, person, time: combinedTime, message });
+        newbooking.user = req.user._id;
+        await newbooking.save();
+        let currBookings = req.user.bookings;
+        currBookings.push(newbooking);
+        await User.findByIdAndUpdate(req.user._id, { bookings: currBookings });
+        res.redirect("/");
+    }
+}
+
+const workshopRegistration = async (req, res) => {
+    let { id } = req.params;
+    let flag = true;
+    console.log("register");
+
+    let userRegistrations = await req.user.populate("workshopsRegistered");
+    console.log(userRegistrations);
+    userRegistrations.workshopsRegistered.forEach((registration) => {
+        if (registration.workshop == id) {
+            flag = false;
+            return res.send({ name: req.user.fullname, status: "Already Registered!" });
+        }
+    })
+    if (flag) {
+        const { userMessage, userPhone } = req.body;
+
+        const user = await User.findById(req.user._id);
+        const workshop = await Workshop.findById(id);
+
+        const newRegistration = new Registration({ phoneNumber: userPhone, message: userMessage });
+        newRegistration.user = user._id;
+        newRegistration.workshop = workshop._id;
+        await newRegistration.save();
+
+        user.workshopsRegistered.push(newRegistration);
+        await User.findByIdAndUpdate(req.user._id, user);
+        workshop.registrations.push(newRegistration);
+        await Workshop.findByIdAndUpdate(id, workshop, { new: true });
+        res.send({ name: req.user.fullname, status: "Your Registration is Successful!" });
+    }
+}
+
+
+const renderTestimonialForm = (req, res) => {
+    res.render("homepage/useraddtestimonial.ejs", { user: req.user });
+}
+
+const renderUserDashboard = async (req, res) => {
+    let {section} = req.query;
+    let userData = await req.user.populate([{ path: "workshopsRegistered", populate: { path: "workshop" } }, "bookings", "testimonial"]);
+    console.log("yes", userData);
+    let notifications = false;
+    if(section == "notifications"){
+        let allNotifications = await Notification.find({});
+        let oldData = await User.findByIdAndUpdate(userData._id,{notificationRemaining:0});
+        notifications = {allNotifications, numOfUnread : oldData.notificationRemaining};
+    }
+    console.log(notifications," [[[[]]]]" ,section);
+
+    res.render("homepage/userdashboard.ejs", { userData,notifications});
+}
+
+const updateUser = async (req, res) => {
+    let { id } = req.params;
+    let { fullname, gender, DOB } = req.body;
+
+    console.log(req.file);
+
+    if (!req.file) {
+        console.log("idhar brother");
+        let document = await User.findByIdAndUpdate(id, { fullname: fullname, gender: gender, DOB: DOB });
+        return res.redirect("/dashboard"); //yaha pe else hai nahi tho return lagana must
+    }
+    else {
+        console.log("i m in");
+        let myFile = req.file.originalname;
+        let fileLocation = path.join("./uploads", myFile);
+        fs.readFile(fileLocation, async (err, data) => {
+            if (err) throw next(new ExpressError(400, "Please Enter Valid file Name!"));
+
+            imagekit.upload({
+                file: data,   //required
+                fileName: myFile,   //required
+                folder: "/Koe_Cafe/profilephoto"
+            },
+                async function (error, result) {
+                    if (error) {
+                        console.log(error);
+                        return next(new ExpressError(406, "Error in Uploading Image!,Add a vallid image."));
+                    }
+                    else {
+                        let image = result.url;
+                        let imageid = result.fileId;
+                        let profilepicture = {
+                            isUpdated: true,
+                            imageid: imageid,
+                            imagelink: image,
+                        }
+                        let oldData = await User.findOneAndUpdate({ _id: id }, { fullname: fullname, gender: gender, DOB: DOB, profilepicture: profilepicture });
+                        console.log(oldData);
+                        if (oldData.profilepicture.isUpdated) {
+                            imagekit.deleteFile(oldData.profilepicture.imageid)
+                                .then(response => {
+                                    console.log(response);
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                    throw error; //promise chaining catch and This error will propagate to the next catch block(wrapAsync) 
+                                });
+                        }
+                        fs.unlinkSync(fileLocation);
+                        res.redirect("/dashboard");
+                    }
+                });
+        });
+
+    }
+}
+
+module.exports = { loadMainPage, tabelBooking, workshopRegistration, renderTestimonialForm, renderUserDashboard, updateUser };

@@ -4,23 +4,25 @@ const multer = require('multer');
 const { storage } = require("../config/imagekitconfig.js");
 const { showTestimonials, createTestimonial, destroyTestimonial, renderEditForm, updateTestimonial } = require("../controllers/testimonialsectioncontroller.js")
 const upload = multer({ storage: storage });
-const {validateTestimonial} = require("../middlewares/adminmiddlewares.js");
+const { wrapAsync } = require("../utils/wrapAsyncAndExpressError");
+const { validateTestimonial} = require("../middlewares/adminmiddlewares.js");
+const {redirectAsRole} = require("../middlewares/homepagemiddleware.js");
 
 router.route("/")
     //get request on testimonials
-    .get(showTestimonials)
+    .get( showTestimonials)
 
     //post request on testimonials
-    .post(upload.single('myFile'),validateTestimonial, createTestimonial)
+    .post( upload.single('myFile'),redirectAsRole, validateTestimonial, wrapAsync(createTestimonial))
 
 router.route("/edit/:id")
     //get request to edit testimonials section
-    .get(renderEditForm)
+    .get( wrapAsync(renderEditForm))
 
     //patch request on edittestimonials redirect to testimoniasl
-    .patch(upload.single('myFile'), updateTestimonial);
+    .patch(validateTestimonial,redirectAsRole,wrapAsync(updateTestimonial));
 
 //delete request on testimonials page and again redirect to same page
-router.delete("/:id", destroyTestimonial)
+router.delete("/:id",redirectAsRole, wrapAsync(destroyTestimonial))
 
 module.exports = router;

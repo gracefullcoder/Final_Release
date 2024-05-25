@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const Booking = require("../models/booking.js");
+const { wrapAsync } = require("../utils/wrapAsyncAndExpressError");
+const { showAllBookings, destroyBooking, renderEditForm, updateBooking } = require("../controllers/bookingcontroller.js");
+const {validateBookings,redirectAsRole} = require("../middlewares/homepagemiddleware.js");
 
-router.get("/", async (req, res) => {
-    let bookings = await Booking.find();
-    console.log(bookings);
-    res.render("bookings/bookatable.ejs", { bookings })
-})
 
-router.delete("/:id", async (req, res) => {
-    let { id } = req.params;
-    id = id.toString();
-    let document = await Booking.findByIdAndDelete(id);
-    res.redirect("/admin/bookings");
-})
+router.get("/", wrapAsync(showAllBookings))
+
+router.delete("/:id",redirectAsRole, wrapAsync(destroyBooking))
+
+router.route("/edit/:id")
+
+    .get(wrapAsync(renderEditForm))
+
+    .patch(validateBookings,redirectAsRole,wrapAsync(updateBooking))
+
 
 module.exports = router;
