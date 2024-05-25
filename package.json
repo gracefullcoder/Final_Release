@@ -2,10 +2,10 @@
   "name": "koe---the-kafe",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "admin.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node admin.js",
+    "dev": "nodemon admin.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
