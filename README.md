@@ -1,36 +1,72 @@
 ## Deployment
-[Deployment Link - Koe the Cafe Admin Dashboard](https://admin-koe-the-cafe.onrender.com)
+Deployment Link - [Koe the Cafe  Website!](https://admin-koe-the-cafe.onrender.com)
 
 # Koe the Cafe
 
-Welcome to Koe the Cafe's dynamic website repository! This project empowers administrators to effortlessly manage every section of the website, ensuring a seamless and captivating user experience. With a strong emphasis on frontend aesthetics and functionality, Koe the Cafe offers a delightful journey for visitors.
-
-## Introduction
-
-Koe the Cafe is not just a website; it's an experience! Administrators can easily customize every aspect of the site, from its appearance to the content, ensuring that visitors are always engaged and delighted. Whether it's booking a table for a cozy evening or registering for exciting workshops, Koe the Cafe brings convenience and excitement to every visitor.
+Welcome to Koe the Cafe's Koe the Café is a full-stack web application. This project showcases a café management system with extensive features for both users and administrators. With a strong emphasis on frontend aesthetics and functionality, Koe the Cafe offers a delightful journey for visitors.
 
 ## Key Features
 
-- **Dynamic Content Management:** Admins can update, add, or remove content in real time, ensuring that the website is always fresh and engaging.
+- **MVC Structured Code**:
+  - Organized codebase following the Model-View-Controller pattern for better code maintainability and scalability.
+  - Separation of concerns, making the development process more efficient.
+ 
+- **User Features**
+  - Profile Management: Update personal details and profile photo.
+  - Table Booking: Book, view, modify, or cancel table reservations.
+  - Workshop Registration: Register, view, and manage workshop participation.
+  - Testimonials: Add, edit, or delete testimonials.
+  - Dashboard: Centralized view of all user activities and perform CRUD operations.
+
+- **Admin Features**
+  - Dynamic Content Management: Update, add, or remove website content in real-time, including event sections, specialty sections, hero sections, and workshop sections, ensuring that the website is always fresh and engaging..
+  - Workshop Management: Create new workshops, manage workshop registrations, and handle workshop cancellations.
+  - User Management: Perform CRUD operations on registered users, including managing roles and permissions.
+  - Table Booking Management: View and manage table bookings, including today's bookings for efficient customer service.
+  - Notification System: Create and send notifications to users via the user dashboard, as well as send emails to all registered users using Nodemailer.
+  - Testimonial Management: Manage user testimonials for showcasing customer feedback.
+
+- **Authentication**: 
+  - Implemented with Google OAuth strategy for seamless and secure user login.
+  - Local authentication strategy using Passport.js for traditional email/password login.
+  - Secure handling of user credentials with hashing and salting.
+
+- **Authorization**: 
+  - Role-based access control to restrict access to admin features.
+  - Ensures only authorized users can perform sensitive operations.
+ 
+- **Notifications and Emails**:
+  - Send notifications to users directly from the admin dashboard.
+  - Use Nodemailer to send emails to all registered users, ensuring effective communication.
+    
+- **Express Session**: 
+  - Session management using `express-session` with MongoDB as the store to persist session data.
+  - Ensures user sessions remain consistent across server restarts.
+    
+- **Custom Error Handling**: 
+  - Centralized error handling mechanism to catch and manage errors effectively.
+  - Custom error messages and status codes for better debugging and user experience.
+
+- **Validation**: 
+  - Comprehensive validation using Joi on both client-side and server-side to ensure data integrity.
+  - Prevents invalid data from being processed or stored in the database.
+
 - **Visitor Interaction:** Visitors can book tables for dining experiences and register for workshops directly from the website, enhancing user engagement.
-- **Notifications:** Admins can create notifications for users. Users will see these new messages when they log in, keeping them informed and engaged.
-- **User Dashboard:** Users can manage their bookings, view their previous bookings and registered workshops, and edit their bookings, workshop registrations, and testimonials in their personalized dashboard.
-- **MVC Architecture:** The codebase follows a structured MVC (Models, Views, Controllers) architecture, making it modular, scalable, and easy to maintain.
-- **Server-side Schema Validation:** Proper server-side schema validation is implemented using Joi, ensuring data integrity and security.
-- **Error Handling:** Robust error handling mechanisms are in place to provide a smooth and error-free experience for users.
-- **Database:** MongoDB is used as the database, providing flexibility and scalability for managing dynamic content.
 - **Server-side:** The server is powered by Express.js and Node.js, delivering a robust and efficient backend for seamless user experiences.
+
+## Technologies Used
 
 ## Technologies Used
 
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB
-- **Frontend:** EJS, Bootstrap
+- **Frontend:** EJS, HTML, CSS
 - **File Uploads:** Multer, ImageKit
 - **Environment Management:** dotenv
 - **Schema Validation:** Joi
-- **Error Handling:** Proper error handling mechanisms
-- **Code Structure:** MVC Architecture
+- **Session Management:** express-session, connect-mongo
+- **Authentication:** Passport.js (Google Strategy, Local Strategy), passport-google-oidc, passport-local-mongoose
+- **Email Handling:** Nodemailer, send-email
 - **Other Tools:** method-override for RESTful routing, and more.
 
 ## Getting Started
@@ -66,9 +102,5 @@ Koe the Cafe is not just a website; it's an experience! Administrators can easil
     ```bash
     npm start
     ```
-
-### Accessing Admin Dashboard
-
-- Visit `http://localhost:8080/admin` in the browser
 
 With these steps and features, Koe the Cafe ensures both administrators and users have a smooth and enjoyable experience managing and interacting with the website.

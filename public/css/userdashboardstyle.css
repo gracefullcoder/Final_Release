@@ -64,6 +64,10 @@ body.dark .activity-data::-webkit-scrollbar-thumb:hover {
   background: #3a3b3c;
 }
 
+a{
+  text-decoration: none;
+}
+
 nav {
   position: fixed;
   top: 0;
@@ -449,6 +453,10 @@ input[type='file'] {
   gap: 5rem;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.activity-sub-heading{
+  margin-block: 2rem 1rem;
 }
 
 .user-activity .activity-number{
@@ -904,8 +912,12 @@ button[type="submit"]:hover {
     padding: 2rem 0rem 3rem 0rem;
   }
 
+  .dashboard .dash-content{
+    padding-top: 125px;
+  }
+
   .overview{
-    padding: 1.25rem 0rem;
+    padding: 0rem 0.5rem 1.25rem 0.5rem;
   }
 
   .activity{
