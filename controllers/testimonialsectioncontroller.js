@@ -30,7 +30,7 @@ const createTestimonial = async (req, res, next) => {
         imagekit.upload({
             file: data, //required
             fileName: myFile, //required
-            folder: "/Koe_Cafe/profilephoto"
+            folder: "/Koe_Cafe_EJS/profilephoto"
         }, async function (error, result) {
             if (error) throw next(new ExpressError(406, "Error in Uploading Image!"));
             else {

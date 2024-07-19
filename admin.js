@@ -17,7 +17,7 @@ const User = require("./models/user.js");
 const { isAdmin } = require("./middlewares/adminmiddlewares.js");
 const PORT = process.env.PORT || 8080;
 const connectDB = require('./config/dbconfig.js');
-const {ExpressError} = require("./utils/wrapAsyncAndExpressError.js")
+const { ExpressError } = require("./utils/wrapAsyncAndExpressError.js")
 
 //routes
 const homeRouter = require("./routes/homepageroute.js");
@@ -95,7 +95,7 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.AUTH_REDIRECT_URI,
   passReqToCallback: true,
 },
-  async function verify(req,issuer, profile, cb) {
+  async function verify(req, issuer, profile, cb) {
     try {
       console.log(profile);
       let existingUser = await User.findOne({ username: profile.emails[0].value })
@@ -110,7 +110,7 @@ passport.use(new GoogleStrategy({
           // };
           // req.session.fullname = profile.displayName,
           // req.session.username = profile.emails[0].value;
- 
+
           return cb(null, false, { message: 'form_incomplete' });
         }
 

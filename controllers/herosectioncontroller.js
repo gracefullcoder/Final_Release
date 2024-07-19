@@ -9,7 +9,7 @@ const showHeroSliders = async (req, res) => {
     res.render("herosection/herosection.ejs", { heroSliders });
 }
 
-const createHeroSlider = async (req, res,next) => {
+const createHeroSlider = async (req, res, next) => {
     let { label, title, text } = req.body;
     label = label.toString();
     title = title.toString();
@@ -30,7 +30,7 @@ const createHeroSlider = async (req, res,next) => {
         imagekit.upload({
             file: data, //fs read kiya and valid path tho data is file
             fileName: myFile, //req.file se mil gaya
-            folder: "/Koe_Cafe/herosection"
+            folder: "/Koe_Cafe_EJS/herosection"
         }, async function (error, result) {
             if (error) {
                 console.log(error);
@@ -98,7 +98,7 @@ const updateHeroSlider = async (req, res, next) => {
             imagekit.upload({
                 file: data,   //required
                 fileName: myFile,   //required
-                folder: "/Koe_Cafe/herosection"
+                folder: "/Koe_Cafe_EJS/herosection"
             },
                 async function (error, result) {
                     if (error) {

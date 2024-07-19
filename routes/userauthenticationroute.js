@@ -164,7 +164,7 @@ router.get('/oauth2/redirect',
                 <body>
                     <div class="container">
                         <div class="header">
-                            <img src=${"https://ik.imagekit.io/vaibhav11/Koe_Cafe/mail_images/logo1.jpg?updatedAt=1716863831468"} alt="Koe the Cafe Logo">
+                            <img src=${"https://ik.imagekit.io/vaibhav11/Koe_Cafe_EJS/mail_images/logo1.jpg?updatedAt=1716863831468"} alt="Koe the Cafe Logo">
                         </div>
                         <div class="content">
                             <h1>Welcome, ${req.user.fullname}!</h1>
