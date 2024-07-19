@@ -1,15 +1,15 @@
 {
-  "name": "koe---the-kafe",
+  "name": "koe-the-kafe",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "Welcome to Koe the Cafe's Koe the Café is a full-stack web application. This project showcases a café management system with extensive features for both users and administrators. With a strong emphasis on frontend aesthetics and functionality, Koe the Cafe offers a delightful journey for visitors.",
+  "main": "admin.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node admin.js",
+    "dev": "nodemon admin.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vaibhav Gupta",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
