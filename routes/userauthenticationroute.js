@@ -171,7 +171,7 @@ router.get('/oauth2/redirect',
                             <p>We're thrilled to have you join us at Koe the Cafe! Thank you for becoming a part of our community. At Koe the Cafe, we're passionate about serving the finest coffee and creating a welcoming atmosphere for all our guests.</p>
                             <p>As a new member, we invite you to explore our range of delicious beverages and treats. Don't forget to check out our special events and workshops designed to bring coffee lovers together.</p>
                             <p>If you have any questions or need assistance, feel free to reach out to our friendly staff at any time. We're here to make your experience at Koe the Cafe memorable.</p>
-                            <a href=${"https://admin-koe-the-cafe.onrender.com/"} class="button">Visit Our Website</a>
+                            <a href=${"https://koe-the-cafe-dynamic.onrender.com"} class="button">Visit Our Website</a>
                             <p>Best Regards,<br>Vaibhav Gupta</p>
                         </div>
                         <div class="footer">
